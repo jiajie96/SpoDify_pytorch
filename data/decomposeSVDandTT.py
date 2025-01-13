@@ -28,15 +28,32 @@ def load_and_stack_tensors(folder_path):
     return tensor_stack
 
 
-def compute2DSVD(tensor_stack):
-    X = tensor_stack.reshape(-1, 130 * 130 * 130)
-    XXT = np.dot(X, X.T)
-    print(XXT.shape)
-    u2, s, v2= linalg.svd(XXT)
-    u = np.dot(X.T, u2) / np.sqrt(s)
+def compute2DSVD(tensor_stack: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Computes the 2D SVD decomposition of a given tensor stack.
+
+    Args:
+        tensor_stack: A numpy array representing the stack of tensors to be decomposed.
+
+    Returns:
+        A tuple of three numpy arrays: the left singular vectors, the singular values, and the right singular vectors.
+    """
+    X = tensor_stack.reshape(-1, tensor_stack.shape[1]*tensor_stack.shape[2]*tensor_stack.shape[3])
+    u2, s, v2 = linalg.svd(X @ X.T)
+    u = X.T @ u2 / np.sqrt(s)
     return u2, np.sqrt(s), u.T
 
-def computeTT(tensor_stack, ranks):
-    b = tn.Tensor(tensor_stack, ranks_tt = ranks)
+def computeTT(tensor_stack: np.ndarray, ranks: list[int]) -> tn.Tensor:
+    """
+    Computes the Tensor Train (TT) decomposition of a given tensor stack.
+
+    Args:
+        tensor_stack (np.ndarray): A numpy array representing the stack of tensors to be decomposed.
+        ranks (list[int]): A list of integers specifying the TT ranks for the decomposition.
+
+    Returns:
+        tn.Tensor: The TT representation of the input tensor stack.
+    """
+    b = tn.Tensor(tensor_stack, ranks_tt=ranks)
     return b
 
