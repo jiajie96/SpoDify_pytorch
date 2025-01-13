@@ -49,14 +49,6 @@ def read_meshes(local_folder: str, target_num_vertices: int = 4096) -> Tuple[np.
 
     return np.array(meshes_within_folder), filenames_within_folder
 
-def compute_chamfer_distance(i_j):
-    i,j = i_j
-    return pcu.chamfer_distance(np.float64(all_meshes[i]), np.float64(all_meshes[j]))
-
-def compute_hausdorff_distance(i_j):
-    i, j = i_j
-    return pcu.hausdorff_distance(np.float64(all_meshes[i]), np.float64(all_meshes[j]))
-
 def compute_diffusion_maps_without_alphas(X, n_eigenpairs=10):
     L = X
     d = np.sum(L, axis=1)
@@ -108,6 +100,10 @@ def main():
     print(len(all_filenames), len(all_meshes))
     
     # Compute the pairwise Hausdorff distance matrix in parallel
+    def compute_chamfer_distance(i_j):
+        i,j = i_j
+        return pcu.chamfer_distance(np.float64(all_meshes[i]), np.float64(all_meshes[j]))
+
     with Pool() as p:
         chamfer_matrix = np.array(list(tqdm(p.imap_unordered(compute_chamfer_distance, [(i, j) for i in range(num_meshes) for j in range(i, num_meshes)]), total=num_meshes*(num_meshes+1)//2)))
 
