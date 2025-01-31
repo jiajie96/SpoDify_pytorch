@@ -81,7 +81,7 @@ def compute_diffusion_maps_without_alphas(X, n_eigenpairs=10):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mesh_path', type=str, default='/home/sagemaker-user/ExtractData/Planes', help='Path to the mesh files')
+    parser.add_argument('--mesh_path', type=str, default='/data/Planes', help='Path to the mesh files')
     parser.add_argument('--n_eigenpairs', type=int, default=64, help='Number of eigenpairs to compute')
     parser.add_argument('--n_clusters', type=int, default=1000, help='Number of clusters to form')
     args = parser.parse_args()
