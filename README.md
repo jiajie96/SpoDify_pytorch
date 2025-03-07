@@ -6,4 +6,4 @@ You can create and activate a conda environment for this project using the follo
 
 ```bash
 conda env create -f environment.yml
-conda activate SVDGEN
+conda activate SporDify
